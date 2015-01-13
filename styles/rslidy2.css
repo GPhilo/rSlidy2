@@ -1,0 +1,602 @@
+/* slidy.css
+
+   Copyright (c) 2005-2010 W3C (MIT, ERCIM, Keio), All Rights Reserved.
+   W3C liability, trademark, document use and software licensing
+   rules apply, see:
+
+   http://www.w3.org/Consortium/Legal/copyright-documents
+   http://www.w3.org/Consortium/Legal/copyright-software
+*/
+
+/*  kandrews
+  font-family: "Gill Sans MT", "Gill Sans", GillSans, sans-serif;
+*/
+
+/*
+Remove content from
+    body.single_slide div.slide {
+    }
+
+remove float left from slide
+remove all positions from slide and sidebar
+*/
+
+body {
+    color: black;
+    background-color: transparent;
+    font: normal small Verdana, sans-serif;
+    line-height: 120%;
+    overflow: auto;
+}
+
+
+.hamburger-menu
+{
+    cursor: pointer;
+    width:30px;
+    height:5px;
+    margin-left: -0.9em;
+    background-color:rgb(110, 110, 110);
+    border-radius:5px;
+    position:relative;
+    display: block;
+    float: left;
+}
+
+
+.hamburger-menu:after, .hamburger-menu:before
+{
+    content: '';
+    width: 100%;
+    height:5px;
+    background-color:rgb(110, 110, 110);
+    position:absolute;
+    border-radius:5px;
+    display: block;
+}
+
+.hamburger-menu:after
+{
+    top:10px;
+}
+
+.hamburger-menu:before
+{
+    top:20px;
+}
+
+div.toolbar {
+    position: fixed;
+    z-index: 1000;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1.2rem;
+    text-align: right;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-size: 60%;
+    color: red;
+    background-color: rgb(240, 240, 240);
+    border-top: solid 1px rgb(180, 180, 180);
+}
+div.toolbar span.copyright {
+    color: black;
+    margin-left: 0.5rem;
+}
+div.initial_prompt {
+    position: absolute;
+    z-index: 1000;
+    bottom: 1.2rem;
+    width: 100%;
+    background-color: rgb(200, 200, 200);
+    opacity: 0.35;
+    background-color: rgb(200, 200, 200, 0.35);
+    cursor: pointer;
+}
+div.initial_prompt p.help {
+    text-align: center;
+}
+div.initial_prompt p.close {
+    text-align: right;
+    font-style: italic;
+}
+
+div.sidebar_fixed {
+    position:fixed;
+    width:20%;
+    left:0rem;
+    top:0rem;
+    bottom:1.2rem;
+    background-color:rgb(110, 110, 110);
+    z-index:999;
+    overflow-y:scroll;
+}
+
+div.sidebar {
+    float:left;
+    width:20%;
+    margin-bottom:1%;
+    height: 1px;
+    background-color:rgb(0, 0, 0);
+}
+
+div.sidebar.hidden {
+    display: none;
+    position: relative;
+    float: left;
+}
+
+div.sidebar_container {
+    position: relative;
+    height: 25%;
+    width: auto;
+    padding: 0.9em;
+    padding-bottom: 0rem;
+    overflow: hidden;
+}
+div.sidebar_container:hover
+{
+    background-color: rgb(150, 150, 150);
+}
+div.sidebar_slide_preview {
+    -webkit-transform: scale(0.3, 0.3);
+    -webkit-transform-origin: 0 0;
+    transform: scale(0.3, 0.3);
+    pointer-events: none;
+    padding: 4em;
+    transform-origin: 0 0;
+    outline: 0.2rem rgba(0, 0, 0, 1) solid;
+    width: 290%;
+    height: 255%;
+    overflow: hidden;
+}
+div.sidebar_page_num {
+    text-align: center;
+    color: rgb(170, 170, 170);
+}
+div.slidy_toc {
+    position: absolute;
+    z-index: 300;
+    width: 60%;
+    max-width: 30rem;
+    height: 30rem;
+    overflow: auto;
+    top: auto;
+    right: auto;
+    left: 4rem;
+    bottom: 4rem;
+    padding: 1rem;
+    background: rgb(240, 240, 240);
+    border-style: solid;
+    border-width: 1px;
+    font-size: 100%;
+}
+div.slidy_toc .toc_heading {
+    text-align: center;
+    width: 100%;
+    margin: 0;
+    margin-bottom: 1rem;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(180, 180, 180);
+    border-bottom-width: 0.1rem;
+}
+
+div.slide {
+    width: auto; !important;
+    overflow: hidden; !important;
+    border-width: 0;
+    background-color: transparent;
+    font-size: 180%;
+    line-height: 130%;
+    margin: 2em; 
+    padding: 1em;
+    
+}
+div.background {
+    display: none;
+}
+div.handout {
+    margin-left: 1em;
+    margin-right: 1em;
+}
+div.titleslide {
+    text-align: center;
+}
+div.titleslide h1 {
+    padding-top: 0.5em;
+    font-size: 1.6em;
+    margin-bottom: 1.4em;
+}
+div.titleslide h2 {
+    font-size: 1.2em;
+    margin-bottom: 1.4em;
+}
+div.titleslide h3 {
+    font-size: 1em;
+    margin-bottom: 1.2em;
+}
+div.titleslide p {
+    padding: 0.5em 0;
+}
+/*  kandrews
+  font-size: 160%;
+*/
+
+div.toc {
+    position: absolute;
+    top: auto;
+    bottom: 4em;
+    left: 4em;
+    right: auto;
+    width: 60%;
+    max-width: 30em;
+    height: 30em;
+    border: solid thin black;
+    padding: 1em;
+    background: rgb(240, 240, 240);
+    color: black;
+    z-index: 300;
+    overflow: auto;
+    display: block;
+    visibility: visible;
+}
+div.toc-heading {
+    width: 100%;
+    border-bottom: solid 0.1em rgb(180, 180, 180);
+    margin-bottom: 1em;
+    text-align: center;
+}
+img {
+    image-rendering: optimize-quality;
+}
+pre {
+    margin: 1em 0 1em 0;
+    font-size: 80%;
+    padding: 0.1em;
+    border-style: solid;
+    border-left-width: thin;
+    border-top-width: thin;
+    border-right-width: thin;
+    border-bottom-width: thin;
+    border-color: #95ABD0;
+    color: #00428C;
+    background-color: #E4E5E7;
+}
+img {
+    background-color: transparent
+}
+p.copyright {
+    font-size: smaller
+}
+.center {
+    text-align: center
+}
+.footnote {
+    font-size: smaller;
+    margin-left: 2em;
+}
+a img {
+    border-width: 0;
+    border-style: none
+}
+a:visited {
+    color: navy
+}
+a:link {
+    color: navy
+}
+a:hover {
+    color: red;
+    text-decoration: underline
+}
+a:active {
+    color: red;
+    text-decoration: underline
+}
+a {
+    text-decoration: none
+}
+.navbar a:link {
+    color: white
+}
+.navbar a:visited {
+    color: yellow
+}
+.navbar a:active {
+    color: red
+}
+.navbar a:hover {
+    color: red
+}
+div dt {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    font-weight: bold;
+}
+div dd {
+    margin-bottom: 0.5em;
+}
+p.subhead {
+    font-weight: bold;
+    margin-top: 2em;
+}
+.smaller {
+    font-size: smaller
+}
+.bigger {
+    font-size: 130%
+}
+td,
+th {
+    padding: 0.2em
+}
+ul {
+    margin: 0.5em 0;
+    padding: 0;
+}
+ol {
+    margin: 0.5rem 0;
+    padding: 0;
+}
+ul {
+    list-style-type: square;
+}
+ul ul {
+    list-style-type: disc;
+}
+ul ul ul {
+    list-style-type: circle;
+}
+ul ul ul ul {
+    list-style-type: disc;
+}
+li {
+    line-height: 120%;
+    margin-bottom: 1.0em;
+}
+li li {
+    font-size: 85%;
+    margin-bottom: 0.8em;
+}
+li li li {
+    font-size: 85%;
+    margin-bottom: 0.6em;
+}
+li ol li {
+    list-style-type: decimal;
+}
+li li ol li {
+    list-style-type: decimal;
+}
+/*
+ setting class="outline on ol or ul makes it behave as an
+ ouline list where blocklevel content in li elements is
+ hidden by default and can be expanded or collapsed with
+ mouse click. Set class="expand" on li to override default
+*/
+
+ol.outline li:hover {
+    cursor: pointer
+}
+ol.outline li.nofold:hover {
+    cursor: default
+}
+ul.outline li:hover {
+    cursor: pointer
+}
+ul.outline li.nofold:hover {
+    cursor: default
+}
+ol.outline {
+    list-style: decimal;
+}
+ol.outline ol {
+    list-style-type: lower-alpha
+}
+ol.outline li.nofold {
+    padding: 0 0 0 20px;
+    background: transparent url(../graphics/nofold-dim.gif) no-repeat 0px 0.5em;
+}
+ol.outline li.unfolded {
+    padding: 0 0 0 20px;
+    background: transparent url(../graphics/fold-dim.gif) no-repeat 0px 0.5em;
+}
+ol.outline li.folded {
+    padding: 0 0 0 20px;
+    background: transparent url(../graphics/unfold-dim.gif) no-repeat 0px 0.5em;
+}
+ol.outline li.unfolded:hover {
+    padding: 0 0 0 20px;
+    background: transparent url(../graphics/fold.gif) no-repeat 0px 0.5em;
+}
+ol.outline li.folded:hover {
+    padding: 0 0 0 20px;
+    background: transparent url(../graphics/unfold.gif) no-repeat 0px 0.5em;
+}
+ul.outline li.nofold {
+    padding: 0 0 0 20px;
+    background: transparent url(../graphics/nofold-dim.gif) no-repeat 0px 0.5em;
+}
+ul.outline li.unfolded {
+    padding: 0 0 0 20px;
+    background: transparent url(../graphics/fold-dim.gif) no-repeat 0px 0.5em;
+}
+ul.outline li.folded {
+    padding: 0 0 0 20px;
+    background: transparent url(../graphics/unfold-dim.gif) no-repeat 0px 0.5em;
+}
+ul.outline li.unfolded:hover {
+    padding: 0 0 0 20px;
+    background: transparent url(../graphics/fold.gif) no-repeat 0px 0.5em;
+}
+ul.outline li.folded:hover {
+    padding: 0 0 0 20px;
+    background: transparent url(../graphics/unfold.gif) no-repeat 0px 0.5em;
+}
+/* for slides with class "title" in table of contents */
+
+a.titleslide {
+    font-weight: bold;
+    font-style: italic
+}
+/*
+ hide images for work around for save as bug
+ where browsers fail to save images used by CSS
+*/
+
+img.hidden {
+    display: none;
+    visibility: hidden
+}
+div.initial_prompt {
+    display: none;
+    visibility: hidden
+}
+div.slide {
+    visibility: visible;
+    position: inherit;
+}
+div.handout {
+    border-top-style: solid;
+    border-top-width: thin;
+    border-top-color: black;
+}
+@media screen {
+    .hidden {
+        display: none;
+        visibility: visible
+    }
+    div.slide.hidden {
+        display: block;
+        visibility: visible
+    }
+    div.handout.hidden {
+        display: block;
+        visibility: visible
+    }
+    div.background {
+        display: none;
+        visibility: hidden
+    }
+    body.single_slide div.initial_prompt {
+        display: block;
+        visibility: visible
+    }
+    body.single_slide div.background {
+        display: block;
+        visibility: visible
+    }
+    body.single_slide div.background.hidden {
+        display: none;
+        visibility: hidden
+    }
+    body.single_slide .invisible {
+        visibility: hidden
+    }
+    body.single_slide .hidden {
+        display: none;
+        visibility: hidden
+    }
+    body.single_slide div.slide {
+    }
+    body.single_slide div.handout {
+        display: none;
+        visibility: hidden
+    }
+}
+@media print {
+    .hidden {
+        display: block;
+        visibility: visible
+    }
+    div.slide pre {
+        font-size: 60%;
+        padding-left: 0.5em;
+    }
+    div.toolbar {
+        display: none;
+        visibility: hidden;
+    }
+    div.slidy_toc {
+        display: none;
+        visibility: hidden;
+    }
+    div.background {
+        display: none;
+        visibility: hidden;
+    }
+    div.slide {
+        page-break-before: always
+    }
+    /* :first-child isn't reliable for print media */
+    div.slide.first-slide {
+        page-break-before: avoid
+    }
+}
+/*
+Keith Andrews: extra CSS for slidy2 slides
+*/
+
+p + p {
+    text-indent: 0;
+}
+span.li-intro {
+    font-style: italic;
+}
+div.footer {
+    margin: 1.5rem 0 0 0;
+    text-align: right;
+    position: relative;
+    bottom: 0px;
+}
+div.titleslide p#location {
+    display: inline-block;
+    background-color: #eee;
+    margin: 0;
+    padding: 0;
+    border-radius: 0.5rem;
+    font-size: 60%;
+}
+span.isbn:before {
+    content: "ISBN";
+    font-size: 80%;
+}
+/* figures */
+
+figure {
+    padding: 1em 0;
+}
+figure div.figure {
+    display: block;
+    text-align: center;
+}
+figure div.figure img {
+    display: inline-block;
+    vertical-align: top;
+    max-width: 100%;
+    max-height: 20em;
+}
+figure div.figure img.vector {} figure figcaption {
+    display: block;
+    clear: both;
+    margin-top: 1em;
+}
+figure figcaption p {
+    font-size: 80%;
+    text-align: left;
+    text-indent: 0;
+}
+figure figcaption span.fig-label {
+    font-weight: bold;
+}
+figure figcaption span.credit {
+    font-size: 80%;
+}
+figure figcaption span.credit:before {
+    content: "[";
+}
+figure figcaption span.credit:after {
+    content: "]";
+}

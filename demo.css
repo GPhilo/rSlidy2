@@ -1,0 +1,27 @@
+div.slide {
+    background-color: transparent;
+}
+div.titleslide {
+    text-align: center;
+    font-family: sans-serif;
+}
+div.titleslide h1 {
+}
+div.titleslide h2 {
+}
+div.titleslide h3 {
+}
+
+h1 {
+    color: rgb(160, 80, 80);
+}
+
+ul {
+}
+
+ui li {
+}
+
+ul li li {
+    margin-left: 2em;
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+
+<head>
+<meta charset="UTF-8"/>
+
+<!-- for css3 media queries to work properly on mobile devices-->
+<meta name="viewport" content="width=device-width"/>
+
+<title>rSlidy2 - Demo Presentation</title> 
+
+<link rel="stylesheet" href="styles/reset.css"/>
+<link rel="stylesheet" href="styles/normalise.css"/>
+<link rel="stylesheet" href="styles/slides-base.css"/>
+<link rel="stylesheet" href="styles/rslidy2.css" />
+<link rel="stylesheet" href="demo.css" />
+
+<script src="scripts/fulltilt.js" charset="utf-8" type="text/javascript"></script>
+<script src="scripts/rslidy2.js" charset="utf-8" type="text/javascript"></script>
+</head>
+
+<body data-tilt="false">
+    
+<div class="slide titleslide">
+<h1>rSlidy2</h1>
+
+<p>
+<h3>Demo Presentation</h3>
+</p>
+
+<p>
+Web site:<br/>
+<a href="http://www.iicm.tugraz.at/keith/">
+<code>add_github link/</code>
+</a>
+</p>
+</div>
+
+<div class="slide">
+<h1>Basics </h1>
+<ul> 
+    <li>Each presentation in a single XHTML file</li>
+    <li>Each slide is enclosed in <em>&lt;div class="slide"&gt; ...
+&lt;/div&gt;</em>
+    <li>Use regular markup within each slide</li>
+    <li>Include style sheet (rslidy2.css) and script (rslidy2.js) in the header</li>
+    <li>You may include a seperate stylesheet for you presentation if you want to change the default style
+    <ul>
+        <li>See demo.css as an example      </li>
+    </ul>
+    </li>
+</ul>
+</div>
+
+<div class="slide">
+<h1>Title Page </h1>
+<ul> 
+    <li>To create a title page use <em>&lt;div class="slide titleslide"&gt; ...
+&lt;/div&gt;</em> </li>
+</ul>
+</div>
+
+<div class="slide">
+<h1>Incremental Display of Slide Contents </h1>
+<ul class="incremental"> 
+    <li>For incremental display, use class="incremental" when creating an HTML-list</li>
+    <li>Like: <em>&lt;ul class="incremental"&gt; ...
+&lt;/ul&gt;</em></li>
+</ul>
+</div>
+
+
+<div class="slide">
+<h1>Anything else is just basic HTML and CSS</h1>
+<ul>
+<li>Right now it is strongly recommended to use a recent version of Chrome to display the slides</li>
+<li>Report issues on our github page: [add here]</li>
+<li>But please note that this is a work in progress
+</li>
+<li>Have fun!</li>
+</ul>
+
+</div>
+</body>
+</html>
