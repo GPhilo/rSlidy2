@@ -25,7 +25,7 @@ This is already done for you in the demo.html. You can ommit fulltilt.js if you'
 
 
 ## 2.2 Add Slides
-Each slide is represented by a div within the <body> of your HTML file. To create a slide apply the class "slide" to a div. 
+Each slide is represented by a div within the ```<body>``` of your HTML file. To create a slide apply the class "slide" to a div. 
 Like: 
 
 ```
@@ -46,7 +46,7 @@ To add content to your slide just add some HTML between those two tags. For inst
 
 
 ## 2.3 Lists 
-One of the most useful html element on slides is probably the list tag. To add a list use either the <ul>,  <ol> or <dl> tag. Like so
+One of the most useful html element on slides is probably the list tag. To add a list use either the ```<ul>,  <ol>``` or ```<dl>``` tag. Like so
 
 ```
 <div class="slide"> 
