@@ -1,5 +1,5 @@
 ## About rSlidy2
-rSlidy2 extends the HTML-based slide show creator Slidy2 by a set of responsive features and UI improvements. It works across browsers and is operated like PowerPoint but the creation and design of the slide-deck is done entirely with HTML and CSS. rSlidy2 requires no internet or server connection and works with pure HTML, CSS and JavaScript. Some features rely on other JavaScript libraries (like hammer.js or fulltilt.js) but those are not required to operate rSlidy2. 
+rSlidy2 extends the HTML-based slide show creator Slidy2 by a set of responsive features and UI improvements. It works across browsers and is operated like PowerPoint but the creation and design of the slide-deck is done entirely with HTML and CSS. rSlidy2 requires no internet or server connection and works with pure HTML, CSS and JavaScript. Some features rely on other JavaScript libraries (like hammer.js or fulltilt.js) but those are not required to operate rSlidy2 in its most basic form. 
 
 
 ## 2 How to use
