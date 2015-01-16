@@ -86,6 +86,9 @@ var w3c_slidy = {
     zPostTotalAcc: 0,
     waitFor2: false,
     waitForNeg2: false,
+    
+    //key handling
+    keymap: [],
 
     // Needed for cross browser support for relative width/height on
     // object elements. The work around is to save width/height attributes
@@ -160,7 +163,7 @@ var w3c_slidy = {
 
         this.toc = this.table_of_contents();
         this.sidebar = this.sidebar();
-        this.hide_sidebar(true);
+        this.hide_overview(true);
 
               
         // this.add_initial_prompt();    // kandrews
@@ -173,6 +176,7 @@ var w3c_slidy = {
             this.add_listener(document.body, "click", this.mouse_button_click);
 
         this.add_listener(document, "keydown", this.key_down);
+        this.add_listener(document, "keyup", this.key_up);
         this.add_listener(document, "keypress", this.key_press);
         this.add_listener(window, "scroll", this.scrolled);
         this.add_listener(window, "unload", this.unloaded);
@@ -527,9 +531,14 @@ var w3c_slidy = {
         this.add_class(sidebar, "sidebar");
     
         // hamburger button for sidebar
+        var sidebar_button_box = document.createElement("div");
+        this.add_class(sidebar_button_box, "hamburger-menu_box");
         var sidebar_button = document.createElement("div");
         this.add_class(sidebar_button, "hamburger-menu");
-        sidebar_button.onclick = w3c_slidy.toggle_sidebar;
+        //sidebar_button.onclick = w3c_slidy.toggle_overview;
+        
+        sidebar_button_box.appendChild(sidebar_button);
+        sidebar_button_box.onclick = w3c_slidy.toggle_overview;
         
         //test to get inverted color of background
         var color = window.getComputedStyle(document.body, null).backgroundColor;
@@ -578,6 +587,7 @@ var w3c_slidy = {
         }
         */
         //test end
+        
         var sidebar_wrapper = this.create_element("div");
         this.add_class(sidebar_wrapper, "sidebar_fixed");
         
@@ -617,8 +627,12 @@ var w3c_slidy = {
             sidebar_wrapper.appendChild(slide_num); 
         }
 
+        this.add_listener(sidebar_wrapper, "touchstart", this.touchstart);
+        this.add_listener(sidebar_wrapper, "touchmove", this.touchmove);
+        this.add_listener(sidebar_wrapper, "touchend", this.touchend);
+        
         sidebar.appendChild(sidebar_wrapper);
-        document.body.insertBefore(sidebar_button, document.body.firstChild);
+        document.body.insertBefore(sidebar_button_box, document.body.firstChild);
         //sidebar_div.appendChild(sidebar);
         document.body.insertBefore(sidebar, document.body.firstChild); 
         //document.body.appendChild(sidebar_div);//this.toolbar); 
@@ -660,18 +674,18 @@ var w3c_slidy = {
     },
 
 
-    toggle_sidebar: function() {
-        if (w3c_slidy.is_shown_sidebar())
-            w3c_slidy.hide_sidebar(true);
+    toggle_overview: function() {
+        if (w3c_slidy.is_shown_overview())
+            w3c_slidy.hide_overview(true);
         else
-            w3c_slidy.show_sidebar();
+            w3c_slidy.show_overview();
     },
 
-    is_shown_sidebar: function() {
+    is_shown_overview: function() {
         return !w3c_slidy.has_class(w3c_slidy.sidebar, "hidden");
     },
 
-    show_sidebar: function() {
+    show_overview: function() {
         w3c_slidy.remove_class(w3c_slidy.sidebar, "hidden");
         var options = w3c_slidy.sidebar;
         
@@ -686,7 +700,7 @@ var w3c_slidy = {
         options.focus();
     },
 
-    hide_sidebar: function(focus) {
+    hide_overview: function(focus) {
         w3c_slidy.add_class(w3c_slidy.sidebar, "hidden");
         
         var divs = document.body.getElementsByTagName("div");
@@ -1133,9 +1147,9 @@ var w3c_slidy = {
             left.appendChild(this.eos);
 
             var help = this.create_element("a");
-            help.setAttribute("href", this.help_page);
+            help.setAttribute("href", this.help_page); 
             help.setAttribute("title", this.localize(this.help_text));
-            help.innerHTML = this.localize("help?");
+            help.innerHTML = this.localize("Help");
             left.appendChild(help);
             this.help_anchor = help; // save for focus hack
 
@@ -1143,12 +1157,12 @@ var w3c_slidy = {
             left.appendChild(gap1);
 
 
-			//Bine das soll das optionsmeny sein
-            var options = this.create_element("a");
-            options.setAttribute("href", "javascript:w3c_slidy.toggle_sidebar()");
-            options.setAttribute("title", this.localize("option menu"));
-            options.innerHTML = this.localize("options menu");
-            left.appendChild(options);
+			//Bine das soll das option menu sein = overview
+            var overview = this.create_element("a");
+            overview.setAttribute("href", "javascript:w3c_slidy.toggle_overview()");
+            overview.setAttribute("title", this.localize("Overview"));
+            overview.innerHTML = this.localize("Overview");
+            left.appendChild(overview);
 
             var gap3 = document.createTextNode(" ");
             left.appendChild(gap3);
@@ -1156,7 +1170,7 @@ var w3c_slidy = {
             var contents = this.create_element("a");
             contents.setAttribute("href", "javascript:w3c_slidy.toggle_table_of_contents()");
             contents.setAttribute("title", this.localize("table of contents"));
-            contents.innerHTML = this.localize("contents?");
+            contents.innerHTML = this.localize("Contents");
             left.appendChild(contents);
 
             var gap2 = document.createTextNode(" ");
@@ -1205,18 +1219,18 @@ var w3c_slidy = {
             var help = this.create_element("a");
             help.setAttribute("href", this.help_page);
             help.setAttribute("title", this.localize(this.help_text));
-            help.innerHTML = this.localize("help?");
+            help.innerHTML = this.localize("Help");
             this.toolbar.appendChild(help);
             this.help_anchor = help; // save for focus hack
 
             var gap1 = document.createTextNode(" ");
             this.toolbar.appendChild(gap1);
 
-            var options = this.create_element("a");
-            options.setAttribute("href", "javascript:w3c_slidy.toggle_option_menu()");
-            options.setAttribute("title", this.localize("option menu"));
-            options.innerHTML = this.localize("sidebar?");
-            this.toolbar.appendChild(options);
+            var overview = this.create_element("a");
+            overview.setAttribute("href", "javascript:w3c_slidy.toggle_option_menu()");
+            overview.setAttribute("title", this.localize("option menu"));
+            overview.innerHTML = this.localize("Overview");
+            this.toolbar.appendChild(overview);
 
             var gap3 = document.createTextNode(" ");
             this.toolbar.appendChild(gap3);
@@ -1224,7 +1238,7 @@ var w3c_slidy = {
             var contents = this.create_element("a");
             contents.setAttribute("href", "javascript:toggleTableOfContents()");
             contents.setAttribute("title", this.localize("table of contents".localize));
-            contents.innerHTML = this.localize("contents?");
+            contents.innerHTML = this.localize("Contents");
             this.toolbar.appendChild(contents);
 
             var gap2 = document.createTextNode(" ");
@@ -1690,6 +1704,11 @@ var w3c_slidy = {
                 w3c_slidy.refresh_toolbar(200);
         }
     },
+    
+    unfold_slide: function(incremental) {
+        if(!w3c_slidy.view_all) {
+        }
+    },
 
     // to first slide with nothing revealed
     // i.e. state at start of presentation
@@ -2040,7 +2059,169 @@ var w3c_slidy = {
 
         return true;
     },
+    
+    key_up: function(e) {
+        e = e || event; // to deal with IE
+        w3c_slidy.keymap[e.keyCode] = e.type == 'keydown';     
+    },
+        
+    key_down: function(e) {
+        e = e || event; // to deal with IE
+        w3c_slidy.keymap[e.keyCode] = e.type == 'keydown';
+    
+        var key, target, tag;
 
+        w3c_slidy.key_wanted = true;
+
+        if (!e)
+            e = window.event;
+
+        // kludge around NS/IE differences 
+        if (window.event) {
+            key = window.event.keyCode;
+            target = window.event.srcElement;
+        } else if (event.which) {
+            key = event.which;
+            target = event.target;
+        } else
+            return true; // Yikes! unknown browser
+
+        // ignore event if key value is zero
+        // as for alt on Opera and Konqueror
+        if (!key)
+            return true;
+
+        // avoid interfering with keystroke
+        // behavior for non-slidy chrome elements
+        if (!w3c_slidy.slidy_chrome(target) &&
+            w3c_slidy.special_element(target))
+            return true;
+
+        // check for concurrent control/command/alt key
+        // but are these only present on mouse events?
+
+        /*if (event.ctrlKey || event.altKey || event.metaKey)
+            return true; */
+
+        // dismiss table of contents if visible
+        if (w3c_slidy.is_shown_toc() && !w3c_slidy.keymap[9] && !w3c_slidy.keymap[16] && !w3c_slidy.keymap[38] && !w3c_slidy.keymap[40]) {
+            w3c_slidy.hide_table_of_contents(true);
+
+            if (w3c_slidy.keymap[27] || w3c_slidy.keymap[84] || w3c_slidy.keymap[67])
+                return w3c_slidy.cancel(event);
+        }
+
+        if (w3c_slidy.keymap[34]) // Page Down
+        {
+            if (w3c_slidy.view_all)
+                return true;
+
+            w3c_slidy.next_slide(false);
+            return w3c_slidy.cancel(event);
+        } else if (w3c_slidy.keymap[33]) // Page Up
+        {
+            if (w3c_slidy.view_all)
+                return true;
+
+            w3c_slidy.previous_slide(false);
+            return w3c_slidy.cancel(event);
+        } else if (w3c_slidy.keymap[32]) // space bar
+        {
+            w3c_slidy.next_slide(true);
+            return w3c_slidy.cancel(event);        
+        }else if (w3c_slidy.keymap[37]) // Left arrow
+        {
+            w3c_slidy.previous_slide(!w3c_slidy.keymap[16]);
+            return w3c_slidy.cancel(event);
+        } else if (w3c_slidy.keymap[36]) // Home
+        {
+            w3c_slidy.first_slide();
+            return w3c_slidy.cancel(event);
+        } else if (w3c_slidy.keymap[35]) // End
+        {
+            w3c_slidy.last_slide();
+            return w3c_slidy.cancel(event);
+        } else if (w3c_slidy.keymap[39]) // Right arrow
+        {
+            if(w3c_slidy.keymap[17]) {
+                w3c_slidy.unfold_slide();
+            }
+            w3c_slidy.next_slide(!w3c_slidy.keymap[16]);
+            return w3c_slidy.cancel(event);
+        } else if (w3c_slidy.keymap[13]) // Enter
+        {
+            if (w3c_slidy.outline) {
+                if (w3c_slidy.outline.visible)
+                    w3c_slidy.fold(w3c_slidy.outline);
+                else
+                    w3c_slidy.unfold(w3c_slidy.outline);
+
+                return w3c_slidy.cancel(event);
+            }
+        } else if (w3c_slidy.keymap[188]) // < for smaller fonts
+        {
+            // w3c_slidy.smaller();
+            return w3c_slidy.cancel(event);
+        } else if (w3c_slidy.keymap[190]) // > for larger fonts
+        {
+            // w3c_slidy.bigger();
+            return w3c_slidy.cancel(event);
+        } else if (w3c_slidy.keymap[189] || w3c_slidy.keymap[109]) // - for smaller fonts
+        {
+            // w3c_slidy.smaller();
+            return w3c_slidy.cancel(event);
+        } else if (w3c_slidy.keymap[187] || w3c_slidy.keymap[191] || w3c_slidy.keymap[107]) // = +  for larger fonts
+        {
+            // w3c_slidy.bigger();
+            return w3c_slidy.cancel(event);
+        } else if (w3c_slidy.keymap[83]) // S for smaller fonts
+        {
+            w3c_slidy.smaller();
+            return w3c_slidy.cancel(event);
+        } else if (w3c_slidy.keymap[79]) // O for overview
+        {
+            w3c_slidy.toggle_overview();
+            return w3c_slidy.cancel(event);
+        } else if (w3c_slidy.keymap[66]) // B for larger fonts
+        {
+            // w3c_slidy.bigger();
+            return w3c_slidy.cancel(event);
+        } else if (w3c_slidy.keymap[90]) // Z for last slide
+        {
+            w3c_slidy.last_slide();
+            return w3c_slidy.cancel(event);
+        } else if (w3c_slidy.keymap[70]) // F for toggle toolbar
+        {
+            w3c_slidy.toggle_toolbar();
+            return w3c_slidy.cancel(event);
+        } else if (w3c_slidy.keymap[65]) // A for toggle view single/all slides
+        {
+            w3c_slidy.toggle_view();
+            return w3c_slidy.cancel(event);
+        } else if (w3c_slidy.keymap[75]) // toggle action of left click for next page
+        {
+            w3c_slidy.mouse_click_enabled = !w3c_slidy.mouse_click_enabled;
+            var alert_msg = (w3c_slidy.mouse_click_enabled ?
+                "enabled" : "disabled") + " mouse click advance";
+
+            alert(w3c_slidy.localize(alert_msg));
+            return w3c_slidy.cancel(event);
+        } else if (w3c_slidy.keymap[84] || w3c_slidy.keymap[67]) // T or C for table of contents
+        {
+            if (w3c_slidy.toc)
+                w3c_slidy.toggle_table_of_contents();
+
+            return w3c_slidy.cancel(event);
+        } else if (w3c_slidy.keymap[72]) // H for help
+        {
+            window.location = w3c_slidy.help_page;
+            return w3c_slidy.cancel(event);
+        }
+        //else alert("key code is "+ key);
+
+    },
+    
+/*
     //  See e.g. http://www.quirksmode.org/js/events/keys.html for keycodes
     key_down: function(event) {
         var key, target, tag;
@@ -2147,7 +2328,10 @@ var w3c_slidy = {
             return w3c_slidy.cancel(event);
         } else if (key == 83) // S for smaller fonts
         {
-            // w3c_slidy.smaller();
+            w3c_slidy.smaller();
+            return w3c_slidy.cancel(event);
+        } else if (key == 79) // O for overview
+        {
             w3c_slidy.toggle_sidebar();
             return w3c_slidy.cancel(event);
         } else if (key == 66) // B for larger fonts
@@ -2188,7 +2372,7 @@ var w3c_slidy = {
         //else alert("key code is "+ key);
 
         return true;
-    },
+    }, */
 
     // safe for both text/html and application/xhtml+xml
     create_element: function(name) {
@@ -2707,8 +2891,8 @@ var w3c_slidy = {
 
     strings_es: {
         "slide": "pág.",
-        "help?": "Ayuda",
-        "contents?": "Índice",
+        "Help": "Ayuda",
+        "Contents": "Índice",
         "table of contents": "tabla de contenidos",
         "Table of Contents": "Tabla de Contenidos",
         "restart presentation": "Reiniciar presentación",
@@ -2719,8 +2903,8 @@ var w3c_slidy = {
 
     strings_ca: {
         "slide": "pàg..",
-        "help?": "Ajuda",
-        "contents?": "Índex",
+        "Help": "Ajuda",
+        "Contents": "Índex",
         "table of contents": "taula de continguts",
         "Table of Contents": "Taula de Continguts",
         "restart presentation": "Reiniciar presentació",
@@ -2731,8 +2915,8 @@ var w3c_slidy = {
 
     strings_cs: {
         "slide": "snímek",
-        "help?": "nápověda",
-        "contents?": "obsah",
+        "Help": "nápověda",
+        "Contents": "obsah",
         "table of contents": "obsah prezentace",
         "Table of Contents": "Obsah prezentace",
         "restart presentation": "znovu spustit prezentaci",
@@ -2744,8 +2928,8 @@ var w3c_slidy = {
 
     strings_nl: {
         "slide": "pagina",
-        "help?": "Help?",
-        "contents?": "Inhoud?",
+        "Help": "Help?",
+        "Contents": "Inhoud?",
         "table of contents": "inhoudsopgave",
         "Table of Contents": "Inhoudsopgave",
         "restart presentation": "herstart presentatie",
@@ -2756,9 +2940,9 @@ var w3c_slidy = {
 
     strings_de: {
         "slide": "Seite",
-        "help?": "Hilfe",
-        "options?": "Optionen",
-        "contents?": "Übersicht",
+        "Help": "Hilfe",
+        "Overview": "Optionen",
+        "Contents": "Übersicht",
         "table of contents": "Inhaltsverzeichnis",
         "Table of Contents": "Inhaltsverzeichnis",
         "restart presentation": "Präsentation neu starten",
@@ -2769,8 +2953,8 @@ var w3c_slidy = {
 
     strings_pl: {
         "slide": "slajd",
-        "help?": "pomoc?",
-        "contents?": "spis treści?",
+        "Help": "pomoc?",
+        "Contents": "spis treści?",
         "table of contents": "spis treści",
         "Table of Contents": "Spis Treści",
         "restart presentation": "Restartuj prezentację",
@@ -2781,8 +2965,8 @@ var w3c_slidy = {
 
     strings_fr: {
         "slide": "page",
-        "help?": "Aide",
-        "contents?": "Index",
+        "Help": "Aide",
+        "Contents": "Index",
         "table of contents": "table des matières",
         "Table of Contents": "Table des matières",
         "restart presentation": "Recommencer l'exposé",
@@ -2794,8 +2978,8 @@ var w3c_slidy = {
 
     strings_hu: {
         "slide": "oldal",
-        "help?": "segítség",
-        "contents?": "tartalom",
+        "Help": "segítség",
+        "Contents": "tartalom",
         "table of contents": "tartalomjegyzék",
         "Table of Contents": "Tartalomjegyzék",
         "restart presentation": "bemutató újraindítása",
@@ -2808,8 +2992,8 @@ var w3c_slidy = {
 
     strings_it: {
         "slide": "pag.",
-        "help?": "Aiuto",
-        "contents?": "Indice",
+        "Help": "Aiuto",
+        "Contents": "Indice",
         "table of contents": "indice",
         "Table of Contents": "Indice",
         "restart presentation": "Ricominciare la presentazione",
@@ -2820,8 +3004,8 @@ var w3c_slidy = {
 
     strings_el: {
         "slide": "σελίδα",
-        "help?": "βοήθεια;",
-        "contents?": "περιεχόμενα;",
+        "Help": "βοήθεια;",
+        "Contents": "περιεχόμενα;",
         "table of contents": "πίνακας περιεχομένων",
         "Table of Contents": "Πίνακας Περιεχομένων",
         "restart presentation": "επανεκκίνηση παρουσίασης",
@@ -2833,8 +3017,8 @@ var w3c_slidy = {
 
     strings_ja: {
         "slide": "スライド",
-        "help?": "ヘルプ",
-        "contents?": "目次",
+        "Help": "ヘルプ",
+        "Contents": "目次",
         "table of contents": "目次を表示",
         "Table of Contents": "目次",
         "restart presentation": "最初から再生",
@@ -2845,8 +3029,8 @@ var w3c_slidy = {
 
     strings_zh: {
         "slide": "幻灯片",
-        "help?": "帮助?",
-        "contents?": "内容?",
+        "Help": "帮助?",
+        "Contents": "内容?",
         "table of contents": "目录",
         "Table of Contents": "目录",
         "restart presentation": "重新启动展示",
@@ -2857,8 +3041,8 @@ var w3c_slidy = {
 
     strings_ru: {
         "slide": "слайд",
-        "help?": "помощь?",
-        "contents?": "содержание?",
+        "Help": "помощь?",
+        "Contents": "содержание?",
         "table of contents": "оглавление",
         "Table of Contents": "Оглавление",
         "restart presentation": "перезапустить презентацию",
@@ -2869,8 +3053,8 @@ var w3c_slidy = {
 
     strings_sv: {
         "slide": "sida",
-        "help?": "hjälp",
-        "contents?": "innehåll",
+        "Help": "hjälp",
+        "Contents": "innehåll",
         "table of contents": "innehållsförteckning",
         "Table of Contents": "Innehållsförteckning",
         "restart presentation": "visa presentationen från början",
@@ -2968,7 +3152,7 @@ if (w3c_slidy.ie6 || w3c_slidy.ie7) {
     document.write("<iframe id='historyFrame' " +
         "src='javascript:\"<html" + "></" + "html>\"' " +
         "height='1' width='1' " +
-        "style='position:absolute;left:-800px'></iframe>");
+        "style='position:absolute;left:-50em'></iframe>");
 }
 
 // attach event listeners for initialization
