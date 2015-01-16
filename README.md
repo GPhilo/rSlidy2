@@ -80,4 +80,4 @@ Please always use a seperate stylesheet and refrain from modifying the rSlidy2.c
 
 
 ## 3 Interaction 
-Use the arrow keys to advance to the next or previous slide. The Home and End key "Pos 1" and "Ende" on German keyboards will jump to the first and last slide respectively. F11 goes to full screen. F toggles the footer and S (or O in the future toggles the Overview.). There are some more keys to be used within the slideshow. To find out about those read the help section within the slides-show. 
+Use the arrow keys to advance to the next or previous slide. The Home and End key "Pos 1" and "Ende" on German keyboards will jump to the first and last slide respectively. F11 goes to full screen. F toggles the footer and O toggles the overview. There are some more keys to be used within the slideshow. To find out about those read the help section within the slides-show. 
