@@ -3155,9 +3155,11 @@ if (w3c_slidy.ie6 || w3c_slidy.ie7) {
         "style='position:absolute;left:-50em'></iframe>");
 }
 
-// attach event listeners for initialization
-w3c_slidy.set_up();
+if (window.preloader !== undefined) {
+  // attach event listeners for initialization
+  w3c_slidy.set_up();
 
-// hide the slides as soon as body element is available
-// to reduce annoying screen mess before the onload event
-setTimeout(w3c_slidy.hide_slides, 50);
+  // hide the slides as soon as body element is available
+  // to reduce annoying screen mess before the onload event
+  setTimeout(w3c_slidy.hide_slides, 50);
+}

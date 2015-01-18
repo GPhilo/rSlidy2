@@ -1,18 +1,7 @@
-(function($){
-
-  script_tag = function(src){
-    var $tag = $("<script>")
-      .attr("charset", "utf-8")
-      .attr("type", "text/javascript");
-    
-    if (src != undefined)
-      $tag.attr("src", src);
-    
-    return $tag;
-  }
+(function($, window){
+  window.preloader = true
 
   include_slidy = function(callback){
-    // var files = ["scripts/rslidy2.js", "scripts/fulltilt.js"],
     var files = ["scripts/rslidy2.js", "scripts/fulltilt.js"],
       file_count = files.length;
     
@@ -73,4 +62,4 @@
     }
   });
 
-})($);
+})($, window);
