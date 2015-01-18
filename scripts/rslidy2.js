@@ -525,7 +525,7 @@ var w3c_slidy = {
             return;
         
        // var sidebar_div = this.create_element("div");
-    //    this.add_class(sidebar_div, "sidebar_div");
+       // this.add_class(sidebar_div, "sidebar_div");
         
         var sidebar = this.create_element("div");
         this.add_class(sidebar, "sidebar");
@@ -544,48 +544,48 @@ var w3c_slidy = {
         var color = window.getComputedStyle(document.body, null).backgroundColor;
         var hexString = 0x000000;
         console.log("background = " + color);
-        /*
+        
+        if(color == "transparent")
+            color = "rgba(0,0,0,0)";
+        
         if(color != null && color != "") {
             var parts;
-            if(color.indexOf("rgba" > -1)) { 
+            if(color.indexOf("rgba(") > -1) { 
+                console.log("rgba " + color);
                parts = color.match(/^rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d+)\)$/);
-               //transparency fix
-               if(parts[1] == 0 && parts[2] == 0 && parts[3] == 0 && parts[4] == 0) {
+               
+                //transparency fix
+               if(parts != null && parts.length > 4 && parts[1] == 0 && parts[2] == 0 && parts[3] == 0 && parts[4] == 0) {
                    parts[1] = parts[2] = parts[3] = 255;
                }
             }
             else {
+                console.log("rgb " + color);
                parts = color.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
             }
 
-            delete (parts[0]);
-            for (var i = 1; i <= 3; ++i) {
-                parts[i] = parseInt(parts[i]).toString(16);
-                if (parts[i].length == 1) parts[i] = '0' + parts[i];
-            } 
-            var hexString ='#'+parts.join('').toUpperCase();
+            if(parts != null && parts.length) {
+                delete (parts[0]);
+                for (var i = 1; i <= 3; ++i) {
+                    parts[i] = parseInt(parts[i]).toString(16);
+                    if (parts[i].length == 1) parts[i] = '0' + parts[i];
+                } 
+                var hexString ='#'+parts.join('').toUpperCase();
 
-            console.log("background = " + hexString);
-            hexString = hexString.substring(1);           // remove #
-            hexString = parseInt(hexString, 16);          // convert to integer
-            hexString = 0xFFFFFF ^ hexString;             // invert three bytes
-            hexString = hexString.toString(16);           // convert to hex
-            hexString = ("000000" + hexString).slice(-6); // pad with leading zeros
-            hexString = "#" + hexString; 
-            console.log("background = " + hexString);
-            sidebar_button.style.backgroundColor = hexString;
+                console.log("background = " + hexString);
+                hexString = w3c_slidy.get_complementary_color(hexString);
+                console.log("background = " + hexString);
+                sidebar_button.style.backgroundColor = hexString;
 
-            // Create a new style sheet to modify hamburger:befor and :after
-            var style = document.createElement("style");
-            document.head.appendChild(style);
-            sheet = style.sheet
-            // Use addRule or insertRule to inject styles
-            sheet.addRule('div.hamburger-menu:before','background-color: ' + hexString );
-            sheet.insertRule('div.hamburger-menu:before { background-color: ' + hexString + ' }', 0);
-            sheet.addRule('div.hamburger-menu:after','background-color: ' + hexString);
-            sheet.insertRule('div.hamburger-menu:after { background-color: ' + hexString + ' }', 0);
-        }
-        */
+                // Create a new style sheet to modify hamburger:befor and :after
+                var style = document.createElement("style");
+                document.head.appendChild(style);
+                sheet = style.sheet
+                // Use addRule or insertRule to inject styles
+                sheet.insertRule('div.hamburger-menu:before { background-color: ' + hexString + ' }', 0);
+                sheet.insertRule('div.hamburger-menu:after { background-color: ' + hexString + ' }', 0); 
+            }
+        } 
         //test end
         
         var sidebar_wrapper = this.create_element("div");
@@ -598,7 +598,9 @@ var w3c_slidy = {
             var toc_slide = this.slides[i].cloneNode(true);
             
             var slideBackground = toc_slide.style.backgroundColor;
-            console.log("BG = " + slideBackground);
+            if(slideBackground == "transparent")
+                slideBackground = "rgba(0,0,0,0)"
+            
             if(slideBackground == null || slideBackground == "") {
                toc_slide.style.backgroundColor = 'white';
             }
@@ -610,7 +612,7 @@ var w3c_slidy = {
                }
             } else if(slideBackground == "") {
                    toc_slide.style.backgroundColor = 'white';
-            }
+            } 
             
             //toc_slide.style.backgroundColor = color;
             w3c_slidy.show_slide(toc_slide);
@@ -619,7 +621,7 @@ var w3c_slidy = {
             slide_container.setAttribute("name", "#(" + (i + 1) + ")");
             slide_container.onclick = w3c_slidy.sidebar_click;
             slide_container.appendChild(toc_slide);
-            sidebar_wrapper.appendChild(slide_container);
+            sidebar_wrapper.appendChild(slide_container)
             
             var slide_num = this.create_element('div');
             this.add_class(slide_num, 'sidebar_page_num');
@@ -627,6 +629,7 @@ var w3c_slidy = {
             sidebar_wrapper.appendChild(slide_num); 
         }
 
+        //hack to disable trigger of toggle_table_of_contents
         this.add_listener(sidebar_wrapper, "touchstart", this.touchstart);
         this.add_listener(sidebar_wrapper, "touchmove", this.touchmove);
         this.add_listener(sidebar_wrapper, "touchend", this.touchend);
@@ -637,6 +640,16 @@ var w3c_slidy = {
         document.body.insertBefore(sidebar, document.body.firstChild); 
         //document.body.appendChild(sidebar_div);//this.toolbar); 
         return sidebar;
+    },
+    
+    get_complementary_color: function(color) {
+        color = color.substring(1);           // remove #
+        color = parseInt(color, 16);          // convert to integer
+        color = 0xFFFFFF ^ color;             // invert three bytes
+        color = color.toString(16);           // convert to hex
+        color = ("000000" + color).slice(-6); // pad with leading zeros
+        color = "#" + color; 
+        return color;
     },
 
     // called on clicking slide in sidebar
@@ -2080,9 +2093,9 @@ var w3c_slidy = {
         if (window.event) {
             key = window.event.keyCode;
             target = window.event.srcElement;
-        } else if (event.which) {
-            key = event.which;
-            target = event.target;
+        } else if (e.which) {
+            key = e.which;
+            target = e.target;
         } else
             return true; // Yikes! unknown browser
 
@@ -2143,6 +2156,7 @@ var w3c_slidy = {
             return w3c_slidy.cancel(event);
         } else if (w3c_slidy.keymap[39]) // Right arrow
         {
+	   console.log("right arrow");
             if(w3c_slidy.keymap[17]) {
                 w3c_slidy.unfold_slide();
             }
