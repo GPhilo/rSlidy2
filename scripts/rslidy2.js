@@ -182,13 +182,31 @@ var w3c_slidy = {
 
         if (!this.keyboardless)
             this.add_listener(document.body, "click", this.mouse_button_click);
-
+        
         this.add_listener(document, "keydown", this.key_down);
         this.add_listener(document, "keyup", this.key_up);
         this.add_listener(document, "keypress", this.key_press);
         this.add_listener(window, "scroll", this.scrolled);
         this.add_listener(window, "unload", this.unloaded);
-
+        
+        w3c_slidy.panning = false;
+        
+        //TODO Decide whether to keep this or native
+        /*
+        $('.slide').each(function() {
+            var mc = new Hammer.Manager(this);
+            mc.add(new Hammer.Swipe({direction:Hammer.DIRECTION_HORIZONTAL}));
+            mc.add(new Hammer.Swipe({event:'swipedown', direction:Hammer.DIRECTION_DOWN, pointers:2}));
+            mc.add(new Hammer.Swipe({event:'swipeup', direction:Hammer.DIRECTION_UP, pointers:2}));
+            mc.on('swipeleft', function(ev) {ev.preventDefault(); w3c_slidy.next_slide(true);});
+            mc.on('swiperight', function(ev) {ev.preventDefault(); w3c_slidy.previous_slide(true);});
+            mc.on('swipeup', function(ev) {ev.preventDefault(); w3c_slidy.hide_table_of_contents(true);});
+            mc.on('swipedown', function(ev) {ev.preventDefault(); w3c_slidy.show_table_of_contents(true);});
+        });
+        */
+        
+        
+        
         this.add_listener(document, "touchstart", this.touchstart);
         this.add_listener(document, "touchmove", this.touchmove);
         this.add_listener(document, "touchend", this.touchend);
@@ -849,30 +867,27 @@ var w3c_slidy = {
             var opt_menu_slide = this.slides[i].cloneNode(true);
             
             var slideBackground = toc_slide.style.backgroundColor;
-            var slideBackground = opt_menu_slide.style.backgroundColor;
+            slideBackground = slideBackground.replace(/\s+/g, '');
+            var toc_slideBackground; 
+            console.log("Slide BG = " + slideBackground);
             
             if(slideBackground == null || slideBackground == "" || slideBackground == "transparent" || slideBackground == "rgba(0,0,0,0)") {
-                slideBackground = window.getComputedStyle(document.body, null).backgroundColor;
+                var bodyBackground = window.getComputedStyle(document.body, null).backgroundColor;
+                bodyBackground = bodyBackground.replace(/\s+/g, '');
+            console.log("Body BG = " + bodyBackground);
+                if(bodyBackground == null || bodyBackground == "" || bodyBackground == "transparent" || bodyBackground == "rgba(0,0,0,0)") {
+                    toc_slide.style.backgroundColor = 'white';
+                } else {
+                   toc_slide.style.background = window.getComputedStyle(document.body, null).background;
+                   toc_slide.style.backgroundImage = window.getComputedStyle(document.body, null).backgroundImage;
+                }
+            } 
+            else {
+               toc_slide.style.backgroundColor = slideBackground;
+               toc_slide.style.background = window.getComputedStyle(document.body, null).background;
+               toc_slide.style.backgroundImage = window.getComputedStyle(document.body, null).backgroundImage;
             }
-            
-            
-            if(slideBackground == "transparent")
-                slideBackground = "rgba(0,0,0,0)"
-            
-            if(slideBackground.indexOf("rgba") > -1) { 
-               console.log("rgba = " + slideBackground);
-               parts = color.match(/^rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d+)\)$/);
-               if(parts[1] == 0 && parts[2] == 0 && parts[3] == 0 && parts[4] == 0)                {
-                   toc_slide.style.backgroundColor = 'white';
-                   opt_menu_slide.style.backgroundColor = 'white';
-               }
-            } else if(slideBackground == "") {
-                   toc_slide.style.backgroundColor = 'white';
-                   opt_menu_slide.style.backgroundColor = 'white';
-            } else {
-                   toc_slide.style.backgroundColor = slideBackground;
-            }
-            
+               
             //toc_slide.style.backgroundColor = color;
             w3c_slidy.show_slide(toc_slide);
             w3c_slidy.show_slide(opt_menu_slide);
@@ -899,7 +914,7 @@ var w3c_slidy = {
         this.add_listener(sidebar_wrapper, "touchend", this.touchend_no_toc);
         
         sidebar.appendChild(sidebar_wrapper);
-        document.body.insertBefore(sidebar_button_box, document.body.firstChild);
+        document.body.insertBefore(sidebar_button_box, document.body.childNodes[0]);
         //sidebar_div.appendChild(sidebar);
         document.body.insertBefore(sidebar, document.body.firstChild); 
         //document.body.appendChild(sidebar_div);//this.toolbar); 
@@ -2463,6 +2478,7 @@ var w3c_slidy = {
             return w3c_slidy.cancel(event);
         } else if (w3c_slidy.keymap[39]) // Right arrow
         {
+	   console.log("right arrow");
             if(w3c_slidy.keymap[17]) {
                 w3c_slidy.unfold_slide();
             }
