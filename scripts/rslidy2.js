@@ -2375,7 +2375,6 @@ var w3c_slidy = {
     },
         
     key_down: function(e) {
-        console.log("key down");
         e = e || event; // to deal with IE
         w3c_slidy.keymap[e.keyCode] = e.type == 'keydown';
     
@@ -2396,15 +2395,11 @@ var w3c_slidy = {
         } else
             return true; // Yikes! unknown browser
 
-        
-        console.log("key down 2");
         // ignore event if key value is zero
         // as for alt on Opera and Konqueror
         if (!key)
             return true;
 
-        
-        console.log("key down 3");
         // avoid interfering with keystroke
         // behavior for non-slidy chrome elements 
         /*
@@ -2412,8 +2407,6 @@ var w3c_slidy = {
             w3c_slidy.special_element(target))
             return true; */
 
-        
-        console.log("key down 4");
         var event = e;
         // check for concurrent control/command/alt key
         // but are these only present on mouse events?
@@ -2470,7 +2463,6 @@ var w3c_slidy = {
             return w3c_slidy.cancel(event);
         } else if (w3c_slidy.keymap[39]) // Right arrow
         {
-	   console.log("right arrow");
             if(w3c_slidy.keymap[17]) {
                 w3c_slidy.unfold_slide();
             }
